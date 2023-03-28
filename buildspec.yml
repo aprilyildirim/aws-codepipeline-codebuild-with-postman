@@ -47,7 +47,7 @@ phases:
           #- echo Pushing the nginx container docker image...
           #- docker push $ECR_LOC/$REPO_NAME_NGINX:$IMAGE_TAG
           
-          - echo $APP_CONT " " $TAG_APP " " $NGINX_CONT " " $TAG_NGINX
+          #- echo $APP_CONT " " $TAG_APP " " $NGINX_CONT " " $TAG_NGINX
           - printf '[{"name":"%s","imageUri":"%s"}, {"name":"%s","imageUri":"%s"}]' $APP_CONT $TAG_APP $NGINX_CONT $TAG_NGINX > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
