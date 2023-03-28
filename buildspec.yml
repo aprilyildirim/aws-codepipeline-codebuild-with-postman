@@ -1,0 +1,53 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+       - version: 0.2
+env:
+    variables:
+        IMAGE_TAG: "latest"
+        AWS_DEFAULT_REGION: us-east-1
+        AWS_ACCOUNT_ID: "192462772057"
+        DF_APP: "Dockerfile.App"
+    secrets-manager:
+        DOCKER_PAT_LOGIN: DevOps/DockerPAT:DOCKER_PAT_LOGIN
+        DOCKER_PAT_TOKEN: DevOps/DockerPAT:DOCKER_PAT_TOKEN
+phases:
+    pre_build:
+        commands:
+          - ECR_LOC=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+          - TAG_APP=$ECR_LOC/$REPO_NAME_APP:$IMAGE_TAG
+          - TAG_NGINX=$ECR_LOC/$REPO_NAME_NGINX:$IMAGE_TAG
+          
+          - echo Logging in to Amazon ECR...
+          - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_LOC
+
+          - echo Logging into Docker with PAT
+          - echo $DOCKER_PAT_TOKEN | docker login --username $DOCKER_PAT_LOGIN --password-stdin
+    build:
+        commands:
+          - echo Build started on `date`
+
+          - echo Building the app container docker image...
+          - echo Tag_app = $TAG_APP
+          - docker build -f $DF_APP -t $TAG_APP --build-arg .
+          - docker tag $TAG_APP $TAG_APP
+          
+          - echo Building the nginx container image...
+          #- docker build -f $DF_NGINX -t $TAG_NGINX .
+          #- docker tag $TAG_NGINX $TAG_NGINX
+    post_build:
+        commands:
+          - echo Build completed on `date`
+
+          - echo Pushing the app container docker image...
+          - docker push $ECR_LOC/$REPO_NAME_APP:$IMAGE_TAG
+
+          #- echo Pushing the nginx container docker image...
+          #- docker push $ECR_LOC/$REPO_NAME_NGINX:$IMAGE_TAG
+          
+          - echo $APP_CONT " " $TAG_APP " " $NGINX_CONT " " $TAG_NGINX
+          - printf '[{"name":"%s","imageUri":"%s"}, {"name":"%s","imageUri":"%s"}]' $APP_CONT $TAG_APP $NGINX_CONT $TAG_NGINX > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
