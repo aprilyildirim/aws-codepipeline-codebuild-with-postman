@@ -18,7 +18,7 @@ phases:
         commands:
           - ECR_LOC=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
           - TAG_APP=$ECR_LOC/$REPO_NAME_APP:$IMAGE_TAG
-          - TAG_NGINX=$ECR_LOC/$REPO_NAME_NGINX:$IMAGE_TAG
+          #- TAG_NGINX=$ECR_LOC/$REPO_NAME_NGINX:$IMAGE_TAG
           
           - echo Logging in to Amazon ECR...
           - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_LOC
