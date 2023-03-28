@@ -26,7 +26,7 @@ phases:
 
           - echo Building the app container docker image...
           - echo Tag_app = $TAG_APP
-          - docker build -f $DF_APP -t $TAG_APP --build-arg .
+          - docker build -f $DF_APP -t $TAG_APP --build-arg
           - docker tag $TAG_APP $TAG_APP
           
           - echo Building the nginx container image...
