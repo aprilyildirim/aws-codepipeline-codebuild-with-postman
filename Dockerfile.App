@@ -26,9 +26,11 @@ COPY environment.json /
 ENV POSTMAN_COLLECTION_PATH=/collection.json
 ENV POSTMAN_ENVIRONMENT_PATH=/environment.json
 
+# Expose the port that Postman will use
+EXPOSE 3000
+
 # Define the command to start Postman
 CMD ["postman"]
 
-# Expose the port that Postman will use
-EXPOSE 3000
+
 
