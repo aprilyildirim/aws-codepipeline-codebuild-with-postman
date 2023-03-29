@@ -11,7 +11,7 @@ RUN apt-get update \
 # Download and install the latest version of Postman
 #RUN https://dl.pstmn.io/download/latest/linux64 postman.tar.gz \
 RUN curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh \
-    && mv postman-cli.tar.gz postman.tar.gz \
+    && cp postman-cli.tar.gz postman.tar.gz \
     && tar -xzf postman.tar.gz \
     && rm postman.tar.gz \
     && mv Postman /opt/Postman \
