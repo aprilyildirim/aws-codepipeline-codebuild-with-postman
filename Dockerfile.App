@@ -9,7 +9,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install the latest version of Postman
-RUN apt-get https://dl.pstmn.io/download/latest/linux64 -O postman.tar.gz \
+RUN apt-get https://dl.pstmn.io/download/latest/linux64 postman.tar.gz \
     && tar -xzf postman.tar.gz \
     && rm postman.tar.gz \
     && mv Postman /opt/Postman \
