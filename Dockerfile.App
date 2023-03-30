@@ -1,38 +1,19 @@
 FROM ubuntu:latest
 
-# Install required packages
-RUN apt-get update \
-    && apt-get install -y \
-       curl \
-       wget \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y wget libgtk2.0-0 libcanberra-gtk-module libx11-xcb-dev libxcb-dri3-dev libxtst-dev libgconf-2-4 libnss3 libasound2 libxtst6 xauth xvfb
 
-# Download and install the latest version of Postman
-#RUN https://dl.pstmn.io/download/latest/linux64 postman.tar.gz \
-RUN curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh \
-    && cp postman-cli.tar.gz postman.tar.gz \
-    && tar -xzf postman.tar.gz \
-    && rm postman.tar.gz \
-    && mv Postman /opt/Postman \
-    && ln -s /opt/Postman/Postman /usr/bin/postman
+# Install Postman
+RUN wget -O /tmp/Postman.tar.gz https://dl.pstmn.io/download/latest/linux64 && \
+    tar -xzf /tmp/Postman.tar.gz -C /opt && \
+    rm /tmp/Postman.tar.gz
 
-# Set the working directory
-WORKDIR /app
+# Create a desktop entry for Postman
+RUN echo "[Desktop Entry]\nEncoding=UTF-8\nName=Postman\nExec=/opt/Postman/app/Postman\nIcon=/opt/Postman/app/resources/app/assets/icon.png\nTerminal=false\nType=Application\nCategories=Development;" >> /usr/share/applications/Postman.desktop
 
-# Copy the Postman files to the container
-COPY collection.json /
-COPY environment.json /
+# Expose Postman to the host system
+EXPOSE 8080
 
-# Add environment variables
-ENV POSTMAN_COLLECTION_PATH=/collection.json
-ENV POSTMAN_ENVIRONMENT_PATH=/environment.json
-
-# Expose the port that Postman will use
-EXPOSE 3000
-
-# Define the command to start Postman
-CMD ["postman"]
-
-
-
+# Start Postman
+CMD ["xvfb-run", "-a", "/opt/Postman/app/Postman"]
