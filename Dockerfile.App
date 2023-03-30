@@ -8,10 +8,7 @@ RUN apt-get update && \
 RUN wget -O /tmp/Postman.tar.gz https://dl.pstmn.io/download/latest/linux64 && \
     tar -xzf /tmp/Postman.tar.gz -C /opt && \
     rm /tmp/Postman.tar.gz
-
-# Create a desktop entry for Postman
-RUN echo "[Desktop Entry]\nEncoding=UTF-8\nName=Postman\nExec=/opt/Postman/app/Postman\nIcon=/opt/Postman/app/resources/app/assets/icon.png\nTerminal=false\nType=Application\nCategories=Development;" >> /usr/share/applications/Postman.desktop
-
+    
 # Expose Postman to the host system
 EXPOSE 8080
 
