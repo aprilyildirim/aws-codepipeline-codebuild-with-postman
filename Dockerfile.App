@@ -1,4 +1,4 @@
-FROM nvidia/cudagl:11.4.0-devel-ubuntu20.04
+FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
