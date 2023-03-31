@@ -1,25 +1,18 @@
+# Use Ubuntu as base image
 FROM ubuntu:latest
 
+# Update packages and install dependencies
 RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    curl \
-    libglib2.0-0 \
-    libgtk-3-0 \
-    libnotify4 \
-    libnss3 \
-    libxss1 \
-    libxtst6 \
-    xdg-utils \
-    libgbm1 mesa-utils \
-    libasound2
+    nodejs \
+    npm \
+    git
 
-# Install Postman
-RUN curl -L https://dl.pstmn.io/download/latest/linux -o postman.tar.gz \
-    && tar -xzf postman.tar.gz -C /opt \
-    && rm postman.tar.gz \
-    && ln -s /opt/Postman/Postman /usr/bin/postman
-    
+# Install Newman
+RUN npm install -g newman
+
+# Set working directory
 WORKDIR /app
 COPY . .
 
-CMD ["postman"]
+# Run Newman
+CMD ["newman", "run", “PetStoreAPI.postman_collection.json"]
