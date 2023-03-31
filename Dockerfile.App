@@ -6,5 +6,8 @@ RUN apt-get update && \
     tar -xzf postman.tar.gz -C /opt && \
     rm postman.tar.gz && \
     ln -s /opt/Postman/Postman /usr/bin/postman
+    
+WORKDIR /app
+COPY . .
 
 CMD ["postman"]
