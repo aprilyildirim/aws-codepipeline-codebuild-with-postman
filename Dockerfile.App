@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils \
-    libgbm1 mesa-utils
+    libgbm1 mesa-utils \
+    libasound2
 
 # Install Postman
 RUN curl -L https://dl.pstmn.io/download/latest/linux -o postman.tar.gz \
